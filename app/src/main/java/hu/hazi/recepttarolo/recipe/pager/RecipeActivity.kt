@@ -1,5 +1,7 @@
 package hu.hazi.recepttarolo.recipe.pager
 
+import android.content.Intent
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import hu.hazi.recepttarolo.MainActivity
@@ -8,21 +10,48 @@ import hu.hazi.recepttarolo.recipe.Recipe
 import hu.hazi.recepttarolo.recipe.RecipeDao
 import hu.hazi.recepttarolo.recipe.RecipeDatabase
 import kotlinx.android.synthetic.main.activity_recipe.*
+import kotlin.concurrent.thread
 
-class RecipeActivity : AppCompatActivity(), RecipeDataHolder {
-    private var recipe: Recipe? = null
-    private lateinit var database: RecipeDatabase
+class RecipeActivity : AppCompatActivity() {
+    private var recipeId: Long? = null
+    val recipePagerAdapter: RecipePagerAdapter =  RecipePagerAdapter(supportFragmentManager, this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe)
-        val recipePagerAdapter = RecipePagerAdapter(supportFragmentManager, this)
+        loadItemsInBackground()
         mainViewPager.adapter = recipePagerAdapter
-        var recipeId =  intent.getLongExtra("Recipe");
-        recipe = intent.getLongExtra("Recipe");
-MainActivity.database.recipeDao().getAll()
+        recipeId =  intent.getLongExtra("Recipe", 0)
+
     }
 
-    override fun getRecipe(): Recipe? {
-        TODO("Not yet implemented")
+
+
+    private fun loadItemsInBackground() {
+        thread {
+            val items = MainActivity.database.recipeDao().getAll()
+            runOnUiThread {
+                recipePagerAdapter.update(items)
+            }
+        }
+
     }
+/*
+    private class GetAllContactsAsyncTask :
+        AsyncTask<Void?, Void?, Void?>() {
+
+
+        override fun onPostExecute(aVoid: Void?) {
+            super.onPostExecute(aVoid)
+
+            val recipePagerAdapter = RecipePagerAdapter(supportFragmentManager, this)
+            mainViewPager.adapter = recipePagerAdapter
+        }
+
+        override fun doInBackground(vararg params: Void?): List<Recipe>? {
+            return MainActivity.database.recipeDao().getAll()
+        }
+    }*/
 }
+
+

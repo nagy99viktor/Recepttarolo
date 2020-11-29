@@ -6,20 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import hu.hazi.recepttarolo.R
+import hu.hazi.recepttarolo.recipe.Recipe
 import kotlinx.android.synthetic.main.fragment_recipe.*
 
 
-class RecipeFragment : Fragment() {
+class RecipeFragment(private var recipe: Recipe) : Fragment() {
+
     private var recipeDataHolder: RecipeDataHolder? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        recipeDataHolder = if (activity is RecipeDataHolder) {
+       /* recipeDataHolder = if (activity is RecipeDataHolder) {
             activity as RecipeDataHolder?
         } else {
             throw RuntimeException(
                 "Activity must implement WeatherDataHolder interface!"
             )
-        }
+        }*/
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {
@@ -28,13 +30,11 @@ class RecipeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (recipeDataHolder?.getRecipe() != null) {
-            displayWeatherData()
-        }
+        displayWeatherData()
     }
     private fun displayWeatherData() {
-        val recipe = recipeDataHolder?.getRecipe()
-        tvMain.text = recipe?.name
+
+        tvMain.text = recipe.name
         /*tvDescription.text = weather?.description
 
         Glide.with(this)

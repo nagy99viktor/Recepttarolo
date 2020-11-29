@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
                 adapter.update(items)
             }
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -106,8 +107,8 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
     }
     override fun onRecipeSelected(city: Recipe?) {
         val showDetailsIntent = Intent()
-        showDetailsIntent.setClass(this@MainActivity, RecipeActivity::class.java)
-        showDetailsIntent.putExtra("Recipe", city?.id)
+        showDetailsIntent.setClass(this, RecipeActivity::class.java)
+       // showDetailsIntent.putExtra("Recipe", city?.id)
         startActivity(showDetailsIntent)
     }
 

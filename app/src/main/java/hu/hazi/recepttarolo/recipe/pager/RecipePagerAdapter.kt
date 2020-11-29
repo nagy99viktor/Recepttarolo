@@ -43,6 +43,7 @@ class RecipePagerAdapter(fragmentManager: FragmentManager, private val context: 
    fun update(recipeItems: List<Recipe>) {
        items.clear()
        items.addAll(recipeItems)
+
        notifyDataSetChanged()
    }
 }

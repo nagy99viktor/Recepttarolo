@@ -46,7 +46,7 @@ class RecipeAdapter(private val listener: RecipeClickListener) :
     interface RecipeClickListener {
         fun onItemChanged(item: Recipe)
         fun onItemDeleted(item: Recipe)
-        fun onRecipeSelected(city: Recipe?)
+        fun onRecipeSelected(position: Int)
     }
 
 
@@ -62,7 +62,8 @@ class RecipeAdapter(private val listener: RecipeClickListener) :
             nameTextView = itemView.findViewById(R.id.ShoppingItemNameTextView)
             categoryTextView = itemView.findViewById(R.id.ShoppingItemCategoryTextView)
             removeButton = itemView.findViewById(R.id.ShoppingItemRemoveButton)
-            itemView.setOnClickListener { listener?.onRecipeSelected(item) }
+
+            itemView.setOnClickListener { listener?.onRecipeSelected(this.adapterPosition) }
             removeButton.setOnClickListener {
                 item?.let { it1 -> listener.onItemDeleted(it1) }
             }

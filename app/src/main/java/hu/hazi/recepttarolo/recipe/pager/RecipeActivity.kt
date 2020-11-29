@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_recipe.*
 import kotlin.concurrent.thread
 
 class RecipeActivity : AppCompatActivity() {
-    private var recipeId: Long? = null
+   // private var recipeId =  intent.getLongExtra("Recipe", 0)
     val recipePagerAdapter: RecipePagerAdapter =  RecipePagerAdapter(supportFragmentManager, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +21,7 @@ class RecipeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_recipe)
         loadItemsInBackground()
         mainViewPager.adapter = recipePagerAdapter
-        recipeId =  intent.getLongExtra("Recipe", 0)
+
 
     }
 
@@ -32,26 +32,12 @@ class RecipeActivity : AppCompatActivity() {
             val items = MainActivity.database.recipeDao().getAll()
             runOnUiThread {
                 recipePagerAdapter.update(items)
+                mainViewPager.currentItem = intent.getIntExtra("Recipe", 0);
             }
         }
 
     }
-/*
-    private class GetAllContactsAsyncTask :
-        AsyncTask<Void?, Void?, Void?>() {
 
-
-        override fun onPostExecute(aVoid: Void?) {
-            super.onPostExecute(aVoid)
-
-            val recipePagerAdapter = RecipePagerAdapter(supportFragmentManager, this)
-            mainViewPager.adapter = recipePagerAdapter
-        }
-
-        override fun doInBackground(vararg params: Void?): List<Recipe>? {
-            return MainActivity.database.recipeDao().getAll()
-        }
-    }*/
 }
 
 

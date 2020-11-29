@@ -105,10 +105,10 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
             }
         }
     }
-    override fun onRecipeSelected(city: Recipe?) {
+    override fun onRecipeSelected(position: Int) {
         val showDetailsIntent = Intent()
         showDetailsIntent.setClass(this, RecipeActivity::class.java)
-       // showDetailsIntent.putExtra("Recipe", city?.id)
+        showDetailsIntent.putExtra("Recipe", position)
         startActivity(showDetailsIntent)
     }
 

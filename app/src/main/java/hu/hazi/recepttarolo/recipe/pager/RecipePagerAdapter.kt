@@ -46,4 +46,6 @@ class RecipePagerAdapter(fragmentManager: FragmentManager, private val context: 
 
        notifyDataSetChanged()
    }
+
+
 }

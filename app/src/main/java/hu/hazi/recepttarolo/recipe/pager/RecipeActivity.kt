@@ -6,10 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import hu.hazi.recepttarolo.MainActivity
 import hu.hazi.recepttarolo.R
+import hu.hazi.recepttarolo.recipe.NewRecipeDialogFragment
 import hu.hazi.recepttarolo.recipe.Recipe
 import hu.hazi.recepttarolo.recipe.RecipeDao
 import hu.hazi.recepttarolo.recipe.RecipeDatabase
+import hu.hazi.recepttarolo.recipe.ingredient.Ingredient
+import hu.hazi.recepttarolo.recipe.ingredient.NewIngredientDialogFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_recipe.*
+
 import kotlin.concurrent.thread
 
 class RecipeActivity : AppCompatActivity() {

@@ -11,11 +11,11 @@ interface RecipeDao {
     fun getById(id: Long?): Recipe
 
     @Insert
-    fun insert(shoppingItems: Recipe): Long
+    fun insert(recipes: Recipe): Long
 
     @Update
-    fun update(shoppingItem: Recipe)
+    fun update(recipe: Recipe)
 
     @Delete
-    fun deleteItem(shoppingItem: Recipe)
+    fun deleteItem(recipe: Recipe)
 }

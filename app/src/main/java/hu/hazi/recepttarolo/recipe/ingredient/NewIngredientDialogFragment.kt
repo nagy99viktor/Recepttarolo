@@ -50,7 +50,7 @@ class NewIngredientDialogFragment (var recipeFragment: RecipeFragment): DialogFr
     private fun getIngredientItem() = Ingredient(
         id = null,
         description = descriptionEditText.text.toString(),
-        recipeId = 1
+        recipeId = null
     )
 
 

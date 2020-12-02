@@ -91,11 +91,16 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
     override fun onIngredientCreated(newItem: Ingredient) {
         thread {
             val newId = MainActivity.database.ingredientDao().insert(newItem)
-            val newIngredientItem = newItem.copy(
-                id = newId
-            )
+            val newIngredientItem = recipe.id?.let {
+                newItem.copy(
+                    id = newId,
+                    recipeId= it
+                )
+            }
             this.activity?.runOnUiThread {
-                adapter.addItem(newIngredientItem)
+                if (newIngredientItem != null) {
+                    adapter.addItem(newIngredientItem)
+                }
             }
         }
     }

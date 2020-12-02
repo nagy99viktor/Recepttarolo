@@ -8,12 +8,12 @@ import hu.hazi.recepttarolo.recipe.Recipe
 
 @Entity(foreignKeys = [ForeignKey(entity = Recipe::class,
     parentColumns = arrayOf("id"),
-    childColumns = arrayOf("recipe-id"),
+    childColumns = arrayOf("recipe_id"),
     onDelete = ForeignKey.NO_ACTION)],
     tableName = "ingredients"
 )
 data class Ingredient (
     @ColumnInfo(name = "id") @PrimaryKey(autoGenerate = true) val id: Long?,
     @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "recipe-id") val recipeId: Long
+    @ColumnInfo(name = "recipe_id") val recipeId: Long?
 ){}

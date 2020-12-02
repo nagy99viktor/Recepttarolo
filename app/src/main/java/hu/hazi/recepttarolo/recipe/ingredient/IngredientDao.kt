@@ -10,6 +10,9 @@ interface IngredientDao {
     @Query("SELECT * FROM ingredients WHERE id=:id ")
     fun getById(id: Long?): Ingredient
 
+    @Query("SELECT * FROM ingredients WHERE recipe_id=:recipeId ")
+    fun getByRecipeId(recipeId: Long?): Ingredient
+
     @Insert
     fun insert(ingredients: Ingredient): Long
 

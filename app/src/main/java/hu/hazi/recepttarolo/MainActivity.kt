@@ -3,28 +3,29 @@ package hu.hazi.recepttarolo
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import hu.hazi.recepttarolo.recipe.*
-
 import hu.hazi.recepttarolo.recipe.pager.RecipeActivity
 import hu.hazi.recepttarolo.recipe.shoppinglist.ShoppingListActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlin.concurrent.thread
 
+
 class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
     NewRecipeDialogFragment.NewRecipeDialogListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecipeAdapter
-
+    //private lateinit var filterSpinner: Spinner
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,12 +37,41 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
             )
         }
 
+
+        filterSpinner.setAdapter(
+            ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                resources.getStringArray(R.array.filters)
+            )
+        )
+        filterSpinner.setOnItemSelectedListener(object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>?,
+                selectedItemView: View,
+                position: Int,
+                id: Long
+            ) {
+                loadItemsInBackground()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                loadItemsInBackground()
+            }
+
+        })
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         initRecyclerView()
 
     }
 
     private fun initRecyclerView() {
-        recyclerView = MainRecyclerView
+        recyclerView = RecipeRecyclerView
         adapter = RecipeAdapter(this)
         loadItemsInBackground()
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -50,7 +80,14 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
 
     private fun loadItemsInBackground() {
         thread {
-            val items = Database.getInstance(this).recipeDao().getAll()
+            val items = when (filterSpinner.selectedItemPosition) {
+                0 -> Database.getInstance(this).recipeDao().getAll()
+                1 -> Database.getInstance(this).recipeDao().getByCategory(Recipe.Category.SOUP)
+                2 -> Database.getInstance(this).recipeDao()
+                    .getByCategory(Recipe.Category.MAIN_COURSE)
+                3 -> Database.getInstance(this).recipeDao().getByCategory(Recipe.Category.DESSERT)
+                else -> Database.getInstance(this).recipeDao().getAll()
+            }
             runOnUiThread {
                 adapter.update(items)
             }

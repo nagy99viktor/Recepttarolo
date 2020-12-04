@@ -18,9 +18,16 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string-array name="category_items">
-        <item>SOUP</item>
-        <item>MAIN_COURSE</item>
-        <item>DESSERT</item>
+        <item>Soup</item>
+        <item>Main course</item>
+        <item>Dessert</item>
+    </string-array>
+
+    <string-array name="filters">
+        <item>Everything</item>
+        <item>Soup</item>
+        <item>Main course</item>
+        <item>Dessert</item>
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

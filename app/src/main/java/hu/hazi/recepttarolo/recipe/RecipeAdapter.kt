@@ -63,7 +63,7 @@ class RecipeAdapter(private val listener: RecipeClickListener) :
             categoryTextView = itemView.findViewById(R.id.ShoppingItemCategoryTextView)
             removeButton = itemView.findViewById(R.id.ShoppingItemRemoveButton)
 
-            itemView.setOnClickListener { listener?.onRecipeSelected(this.adapterPosition) }
+            itemView.setOnClickListener { listener.onRecipeSelected(this.adapterPosition) }
             removeButton.setOnClickListener {
                 item?.let { it1 -> listener.onItemDeleted(it1) }
             }

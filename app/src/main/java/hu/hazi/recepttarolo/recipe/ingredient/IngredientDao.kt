@@ -11,7 +11,7 @@ interface IngredientDao {
     fun getById(id: Long?): Ingredient
 
     @Query("SELECT * FROM ingredients WHERE recipe_id=:recipeId ")
-    fun getByRecipeId(recipeId: Long?): Ingredient
+    fun getByRecipeId(recipeId: Long?): List<Ingredient>
 
     @Insert
     fun insert(ingredients: Ingredient): Long
@@ -21,4 +21,7 @@ interface IngredientDao {
 
     @Delete
     fun deleteItem(ingredient: Ingredient)
+
+    @Query("DELETE FROM ingredients WHERE recipe_id=:recipeId")
+    fun deleteByRecipeId(recipeId: Long?)
 }

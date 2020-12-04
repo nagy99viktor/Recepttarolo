@@ -14,6 +14,6 @@ import hu.hazi.recepttarolo.recipe.Recipe
 )
 data class Ingredient (
     @ColumnInfo(name = "id") @PrimaryKey(autoGenerate = true) val id: Long?,
-    @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "recipe_id") val recipeId: Long?
+    @ColumnInfo(name = "description") var description: String,
+    @ColumnInfo(name = "recipe_id") var recipeId: Long?
 ){}

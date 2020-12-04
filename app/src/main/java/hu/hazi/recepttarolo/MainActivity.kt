@@ -14,6 +14,7 @@ import androidx.room.Room
 import hu.hazi.recepttarolo.recipe.*
 
 import hu.hazi.recepttarolo.recipe.pager.RecipeActivity
+import hu.hazi.recepttarolo.recipe.shoppinglist.ShoppingListActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlin.concurrent.thread
@@ -23,9 +24,6 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecipeAdapter
-    companion object Database{
-        lateinit var database: RecipeDatabase
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +35,7 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
                 NewRecipeDialogFragment.TAG
             )
         }
-        Database.database = Room.databaseBuilder(
-            applicationContext,
-            RecipeDatabase::class.java,
-            "recipe"
-        ).build()
+
         initRecyclerView()
 
     }
@@ -56,7 +50,7 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
 
     private fun loadItemsInBackground() {
         thread {
-            val items = database.recipeDao().getAll()
+            val items = Database.getInstance(this).recipeDao().getAll()
             runOnUiThread {
                 adapter.update(items)
             }
@@ -74,22 +68,26 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.show_shopping_list -> true
-            else -> super.onOptionsItemSelected(item)
+        if(item.itemId == R.id.show_shopping_list){
+            val showDetailsIntent = Intent()
+            showDetailsIntent.setClass(this, ShoppingListActivity::class.java)
+            startActivity(showDetailsIntent)
+            return true;
         }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onItemChanged(item: Recipe) {
         thread {
-            database.recipeDao().update(item)
+            Database.getInstance(this).recipeDao().update(item)
             Log.d("MainActivity", "ShoppingItem update was successful")
         }
     }
 
     override fun onItemDeleted(item: Recipe) {
         thread {
-            database.recipeDao().deleteItem(item)
+            Database.getInstance(this).ingredientDao().deleteByRecipeId(item.id)
+            Database.getInstance(this).recipeDao().deleteItem(item)
             Log.d("MainActivity", "ShoppingItem delete was successful")
         }
         loadItemsInBackground();
@@ -97,7 +95,7 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
 
     override fun onRecipeCreated(newItem: Recipe) {
         thread {
-            val newId = database.recipeDao().insert(newItem)
+            val newId = Database.getInstance(this).recipeDao().insert(newItem)
             val newShoppingItem = newItem.copy(
                 id = newId
             )

@@ -8,12 +8,12 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import hu.hazi.recepttarolo.R
+import hu.hazi.recepttarolo.recipe.Database
 import hu.hazi.recepttarolo.recipe.RecipeDatabase
-import hu.hazi.recepttarolo.recipe.pager.RecipeActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.activity_shopping_list.*
+
 import kotlin.concurrent.thread
 
 class ShoppingListActivity : AppCompatActivity(), ItemAdapter.ItemClickListener,
@@ -24,21 +24,26 @@ class ShoppingListActivity : AppCompatActivity(), ItemAdapter.ItemClickListener,
         private lateinit var database: RecipeDatabase
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_main)
-            setSupportActionBar(toolbar)
-            fab.setOnClickListener{
+            setContentView(R.layout.activity_shopping_list)
+            newItemFab.setOnClickListener{
                 NewItemDialogFragment().show(
                     supportFragmentManager,
                     NewItemDialogFragment.TAG
                 )
             }
 
-            initRecyclerView()
 
         }
 
+    override fun onResume() {
+        super.onResume()
+        database= Database.getInstance(this)
+
+        initRecyclerView()
+    }
+
         private fun initRecyclerView() {
-            recyclerView = MainRecyclerView
+            recyclerView = ItemRecyclerView
             adapter = ItemAdapter(this)
             loadItemsInBackground()
             recyclerView.layoutManager = LinearLayoutManager(this)
@@ -56,19 +61,23 @@ class ShoppingListActivity : AppCompatActivity(), ItemAdapter.ItemClickListener,
 
         override fun onCreateOptionsMenu(menu: Menu): Boolean {
             // Inflate the menu; this adds items to the action bar if it is present.
-            menuInflater.inflate(R.menu.menu_main, menu)
+            menuInflater.inflate(R.menu.shopping_list_menu, menu)
             return true
         }
 
-        override fun onOptionsItemSelected(item: MenuItem) {
+        override fun onOptionsItemSelected(item: MenuItem): Boolean {
             // Handle action bar item clicks here. The action bar will
             // automatically handle clicks on the Home/Up button, so long
             // as you specify a parent activity in AndroidManifest.xml.
-            if(item.itemId == R.id.show_shopping_list){
-                val showDetailsIntent = Intent()
-                showDetailsIntent.setClass(this, ShoppingListActivity::class.java)
-                startActivity(showDetailsIntent)
+            if(item.itemId == R.id.delete_shopping_list){
+                thread {
+                    Database.getInstance(this).itemDao().deleteAll()
+                    loadItemsInBackground();
+                }
+
+                return true;
             }
+            return super.onOptionsItemSelected(item)
 
         }
 
@@ -91,9 +100,7 @@ class ShoppingListActivity : AppCompatActivity(), ItemAdapter.ItemClickListener,
             thread {
                 val newId = database.itemDao().insert(newItem)
                 val newItem2 = newItem.copy(
-                    id = newId,
-                    isBought = true
-
+                    id = newId
                 )
                 runOnUiThread {
                     adapter.addItem(newItem2)

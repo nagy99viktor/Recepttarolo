@@ -26,4 +26,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="new_ingredient">New ingredient</string>
     <string name="new__item">New item</string>
+    <string name="to_the_shopping_list">To the shopping list</string>
+    <string name="add_new_ingredient">Add new ingredient</string>
+    <string name="add_new_recipe">Add new recipe</string>
+    <string name="add_new_item">Add new item</string>
+    <string name="delete_all">Delete all</string>
 </resources>

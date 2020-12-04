@@ -1,7 +1,6 @@
 package hu.hazi.recepttarolo.recipe.shoppinglist
 
 import androidx.room.*
-import hu.hazi.recepttarolo.recipe.ingredient.Ingredient
 
 @Dao
 interface ItemDao {
@@ -12,11 +11,18 @@ interface ItemDao {
     fun getById(id: Long?): Item
 
     @Insert
-    fun insert(items: Item): Long
+    fun insert(item: Item): Long
+
+    @Insert
+    fun insertAll(items: List<Item>)
 
     @Update
     fun update(item: Item)
 
     @Delete
     fun deleteItem(item: Item)
+
+    @Query("DELETE FROM shoppingList")
+    fun deleteAll()
+
 }

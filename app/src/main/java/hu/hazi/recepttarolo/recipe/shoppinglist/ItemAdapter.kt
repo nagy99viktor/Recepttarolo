@@ -59,7 +59,7 @@ class ItemAdapter(private val listener: ItemClickListener) :
 
             descriptionTextView = itemView.findViewById(R.id.ItemDescriptionTextView)
             isBoughtCheckBox = itemView.findViewById(R.id.ItemIsBoughtCheckBox)
-            removeButton = itemView.findViewById(R.id.ShoppingItemRemoveButton)
+            removeButton = itemView.findViewById(R.id.ItemRemoveButton)
             isBoughtCheckBox.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
                 item?.let {
                     val newItem = it.copy(

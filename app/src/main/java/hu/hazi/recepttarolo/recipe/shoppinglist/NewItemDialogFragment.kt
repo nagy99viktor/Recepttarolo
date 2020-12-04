@@ -41,19 +41,18 @@ class NewItemDialogFragment : DialogFragment() {
             .create()
     }
 
-    private fun isValid() = nameEditText.text.isNotEmpty()
+    private fun isValid() = descriptionEditText.text.isNotEmpty()
 
     private fun getShoppingItem() = Item(
         id = null,
         description = descriptionEditText.text.toString(),
-        isBought = alreadyPurchasedCheckBox.isChecked
+        isBought = false
     )
 
-    private lateinit var nameEditText: EditText
+
     private lateinit var descriptionEditText: EditText
-    private lateinit var estimatedPriceEditText: EditText
-    private lateinit var categorySpinner: Spinner
-    private lateinit var alreadyPurchasedCheckBox: CheckBox
+
+
 
     private fun getContentView(): View {
         val contentView =

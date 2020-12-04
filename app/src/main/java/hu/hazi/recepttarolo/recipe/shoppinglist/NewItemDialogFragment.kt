@@ -5,13 +5,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-
 import hu.hazi.recepttarolo.R
 
 
@@ -30,8 +26,13 @@ class NewItemDialogFragment(var editItem: Item?) : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val title = when(editItem){
+            null -> getString(R.string.new__item)
+            else -> getString(R.string.edit_item)
+        }
+
         return AlertDialog.Builder(requireContext())
-            .setTitle(R.string.new__item)
+            .setTitle(title)
             .setView(getContentView())
             .setPositiveButton(R.string.ok) { dialogInterface, i ->
                 if (isValid()) {
@@ -60,12 +61,7 @@ class NewItemDialogFragment(var editItem: Item?) : DialogFragment() {
         return editItem
     }
 
-
-
-
     private lateinit var descriptionEditText: EditText
-
-
 
     private fun getContentView(): View {
         val contentView =
@@ -78,6 +74,6 @@ class NewItemDialogFragment(var editItem: Item?) : DialogFragment() {
     }
 
     companion object {
-        const val TAG = "NewShoppingItemDialogFragment"
+        const val TAG = "NewItemDialogFragment"
     }
 }

@@ -9,10 +9,10 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.EditText
-import hu.hazi.recepttarolo.R
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import hu.hazi.recepttarolo.R
 
 class NewRecipeDialogFragment : DialogFragment() {
     interface NewRecipeDialogListener {
@@ -33,7 +33,7 @@ class NewRecipeDialogFragment : DialogFragment() {
             .setView(getContentView())
             .setPositiveButton(hu.hazi.recepttarolo.R.string.ok) { dialogInterface, i ->
                 if (isValid()) {
-                    listener.onRecipeCreated(getShoppingItem())
+                    listener.onRecipeCreated(getRecipeItem())
                 }
             }
             .setNegativeButton(hu.hazi.recepttarolo.R.string.cancel, null)
@@ -43,7 +43,7 @@ class NewRecipeDialogFragment : DialogFragment() {
 
     private fun isValid() = nameEditText.text.isNotEmpty()
 
-    private fun getShoppingItem() = Recipe(
+    private fun getRecipeItem() = Recipe(
         id = null,
         name = nameEditText.text.toString(),
         description = descriptionEditText.text.toString(),
@@ -74,6 +74,6 @@ class NewRecipeDialogFragment : DialogFragment() {
     }
 
     companion object {
-        const val TAG = "NewShoppingItemDialogFragment"
+        const val TAG = "NewRecipeDialogFragment"
     }
 }

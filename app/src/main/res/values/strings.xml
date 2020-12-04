@@ -1,11 +1,8 @@
 <resources>
     <string name="app_name">Recepttarolo</string>
     <string name="shopping_list">Shopping List</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+
+
 
     <string name="name">Name</string>
     <string name="description">Description</string>
@@ -14,8 +11,6 @@
     <string name="cancel">Cancel</string>
     <string name="new_recipe">New recipe</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string-array name="category_items">
         <item>Soup</item>
@@ -29,8 +24,7 @@
         <item>Main course</item>
         <item>Dessert</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="new_ingredient">New ingredient</string>
     <string name="new__item">New item</string>
     <string name="to_the_shopping_list">To the shopping list</string>
@@ -41,4 +35,6 @@
     <string name="delete_button">Delete button</string>
     <string name="edit_button">Edit button</string>
     <string name="edit_recipe">Edit recipe</string>
+    <string name="edit_item">Edit item</string>
+    <string name="edit_ingredient">Edit ingredient</string>
 </resources>

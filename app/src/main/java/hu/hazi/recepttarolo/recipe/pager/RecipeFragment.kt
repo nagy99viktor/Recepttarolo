@@ -1,23 +1,20 @@
 package hu.hazi.recepttarolo.recipe.pager
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import hu.hazi.recepttarolo.MainActivity
 import hu.hazi.recepttarolo.R
 import hu.hazi.recepttarolo.recipe.Database
 import hu.hazi.recepttarolo.recipe.Recipe
-import hu.hazi.recepttarolo.recipe.RecipeAdapter
 import hu.hazi.recepttarolo.recipe.ingredient.Ingredient
 import hu.hazi.recepttarolo.recipe.ingredient.IngredientAdapter
 import hu.hazi.recepttarolo.recipe.ingredient.NewIngredientDialogFragment
 import hu.hazi.recepttarolo.recipe.shoppinglist.Item
-import hu.hazi.recepttarolo.recipe.shoppinglist.NewItemDialogFragment
 import kotlinx.android.synthetic.main.fragment_recipe.*
 import kotlin.concurrent.thread
 
@@ -27,17 +24,9 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: IngredientAdapter
     private var recipeDataHolder: RecipeDataHolder? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       /* recipeDataHolder = if (activity is RecipeDataHolder) {
-            activity as RecipeDataHolder?
-        } else {
-            throw RuntimeException(
-                "Activity must implement WeatherDataHolder interface!"
-            )
-        }*/
-
-
     }
 
 
@@ -47,6 +36,7 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
         loadItemsInBackground()
         recyclerView.layoutManager = LinearLayoutManager(this.activity)
         recyclerView.adapter = adapter
+
     }
 
     private fun loadItemsInBackground() {
@@ -72,10 +62,18 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
         }
         toTheShoppingList.setOnClickListener{
             thread {
-                val ingredients =  Database.getInstance(requireContext()).ingredientDao().getByRecipeId(recipe.id)
+                val ingredients =  Database.getInstance(requireContext()).ingredientDao().getByRecipeId(
+                    recipe.id
+                )
 
                 for (ingredient: Ingredient in ingredients){
-                    Database.getInstance(requireContext()).itemDao().insert(Item(null, ingredient.description, false))
+                    Database.getInstance(requireContext()).itemDao().insert(
+                        Item(
+                            null,
+                            ingredient.description,
+                            false
+                        )
+                    )
                 }
             }
 
@@ -89,11 +87,15 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
                 )
             }
         }
-
+        DescriptionTextView.movementMethod = ScrollingMovementMethod()
         initRecyclerView()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_recipe, container, false)
     }
 
@@ -102,9 +104,8 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
         displayWeatherData()
     }
     private fun displayWeatherData() {
-
-        tvMain.text = recipe.name
-
+        NameTextView.text = recipe.name
+        DescriptionTextView.text = recipe.description
     }
 
     override fun onIngredientCreated(newItem: Ingredient) {
@@ -112,8 +113,8 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
             newItem.recipeId = recipe.id
             val newId =  Database.getInstance(requireContext()).ingredientDao().insert(newItem)
             val newIngredientItem = newItem.copy(
-                    id = newId
-                )
+                id = newId
+            )
 
             this.activity?.runOnUiThread {
                     adapter.addItem(newIngredientItem)
@@ -121,27 +122,24 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
         }
     }
 
-    override fun onIngredientEdited(newIngredient: Ingredient) {
+    override fun onIngredientEdited(newItem: Ingredient) {
         thread {
-            Database.getInstance(requireContext()).ingredientDao().update(newIngredient)
+            Database.getInstance(requireContext()).ingredientDao().update(newItem)
             loadItemsInBackground();
         }
     }
 
-    override fun onItemChanged(item: Ingredient) {
-        TODO("Not yet implemented")
-    }
 
     override fun onItemDeleted(item: Ingredient) {
         thread {
             Database.getInstance(requireContext()).ingredientDao().deleteItem(item)
+            loadItemsInBackground();
         }
-        loadItemsInBackground();
     }
 
-    override fun onItemEdit(ingredient: Ingredient) {
+    override fun onItemEdit(item: Ingredient) {
         fragmentManager?.let { it1 ->
-            NewIngredientDialogFragment(this, ingredient).show(
+            NewIngredientDialogFragment(this, item).show(
                 it1.beginTransaction(),
                 NewIngredientDialogFragment.TAG
             )

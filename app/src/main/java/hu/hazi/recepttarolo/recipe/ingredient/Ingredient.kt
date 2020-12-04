@@ -1,8 +1,9 @@
 package hu.hazi.recepttarolo.recipe.ingredient
 
-import androidx.room.*
-
-import androidx.room.util.TableInfo
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import hu.hazi.recepttarolo.recipe.Recipe
 
 

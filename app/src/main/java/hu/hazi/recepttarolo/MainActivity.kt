@@ -16,7 +16,6 @@ import hu.hazi.recepttarolo.recipe.*
 import hu.hazi.recepttarolo.recipe.pager.RecipeActivity
 import hu.hazi.recepttarolo.recipe.shoppinglist.ShoppingListActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
 import kotlin.concurrent.thread
 
 
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecipeAdapter
-    //private lateinit var filterSpinner: Spinner
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -117,7 +115,6 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
     override fun onItemChanged(item: Recipe) {
         thread {
             Database.getInstance(this).recipeDao().update(item)
-            Log.d("MainActivity", "ShoppingItem update was successful")
         }
     }
 
@@ -125,7 +122,6 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
         thread {
             Database.getInstance(this).ingredientDao().deleteByRecipeId(item.id)
             Database.getInstance(this).recipeDao().deleteItem(item)
-            Log.d("MainActivity", "ShoppingItem delete was successful")
             loadItemsInBackground();
         }
 
@@ -134,11 +130,11 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
     override fun onRecipeCreated(newItem: Recipe) {
         thread {
             val newId = Database.getInstance(this).recipeDao().insert(newItem)
-            val newShoppingItem = newItem.copy(
+            val newItem2 = newItem.copy(
                 id = newId
             )
             runOnUiThread {
-                adapter.addItem(newShoppingItem)
+                adapter.addItem(newItem2)
             }
         }
     }
@@ -146,6 +142,7 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
         val showDetailsIntent = Intent()
         showDetailsIntent.setClass(this, RecipeActivity::class.java)
         showDetailsIntent.putExtra("Recipe", position)
+        showDetailsIntent.putExtra("filter", filterSpinner.selectedItemPosition)
         startActivity(showDetailsIntent)
     }
 

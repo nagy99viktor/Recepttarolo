@@ -7,12 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".recipe.pager.RecipeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/tvMain"
-        android:layout_width="match_parent"
+        android:id="@+id/NameTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/IngredientRecyclerView"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/RecipeEditButton"
+        app:layout_constraintEnd_toStartOf="@+id/RecipeEditButton"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Clear" />
 
@@ -26,25 +28,28 @@
         android:scaleType="fitXY"
         android:src="@drawable/ic_pencil_grey600_48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/IngredientRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/toTheShoppingList"
+        app:layout_constraintTop_toBottomOf="@+id/DescriptionTextView"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="0dp"
+        tools:listitem="@layout/ingredient_list" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/newIngredientFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/add_new_ingredient"
         android:src="@drawable/ic_add_white_36dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/add_new_ingredient" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/toTheShoppingList"
@@ -52,15 +57,20 @@
         android:layout_height="wrap_content"
         android:text="@string/to_the_shopping_list"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/IngredientRecyclerView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="204dp" />
+
+
+        <TextView
+            android:id="@+id/DescriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:lines="10"
+            android:text="TextView"
+            android:scrollbars = "vertical"
+            app:layout_constraintTop_toBottomOf="@+id/RecipeEditButton" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,18 +3,18 @@ package hu.hazi.recepttarolo.recipe
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.annotation.DrawableRes
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import hu.hazi.recepttarolo.R
 
 
 class RecipeAdapter(private val listener: RecipeClickListener) :
     RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
-
+    private lateinit var itemView: View
     private val items = mutableListOf<Recipe>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
-        val itemView: View = LayoutInflater
+        itemView= LayoutInflater
             .from(parent.context)
             .inflate(R.layout.recipe_list, parent, false)
         return RecipeViewHolder(itemView)
@@ -23,7 +23,7 @@ class RecipeAdapter(private val listener: RecipeClickListener) :
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
         val item = items[position]
         holder.nameTextView.text = item.name
-        holder.categoryTextView.text = item.category.name
+        holder.categoryTextView.text = itemView.context.resources.getStringArray(R.array.category_items)[item.category.ordinal]
         holder.item = item
     }
 
@@ -59,9 +59,9 @@ class RecipeAdapter(private val listener: RecipeClickListener) :
 
         init {
 
-            nameTextView = itemView.findViewById(R.id.ShoppingItemNameTextView)
-            categoryTextView = itemView.findViewById(R.id.ShoppingItemCategoryTextView)
-            removeButton = itemView.findViewById(R.id.ShoppingItemRemoveButton)
+            nameTextView = itemView.findViewById(R.id.nameTextView)
+            categoryTextView = itemView.findViewById(R.id.categoryTextView)
+            removeButton = itemView.findViewById(R.id.recipeRemoveButton)
 
             itemView.setOnClickListener { listener.onRecipeSelected(this.adapterPosition) }
             removeButton.setOnClickListener {

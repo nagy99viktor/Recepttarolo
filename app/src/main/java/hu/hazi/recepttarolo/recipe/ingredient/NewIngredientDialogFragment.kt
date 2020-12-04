@@ -6,17 +6,11 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.CheckBox
 import android.widget.EditText
-import hu.hazi.recepttarolo.R
-import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-
-import hu.hazi.recepttarolo.recipe.ingredient.Ingredient
+import hu.hazi.recepttarolo.R
 import hu.hazi.recepttarolo.recipe.pager.RecipeFragment
-import hu.hazi.recepttarolo.recipe.shoppinglist.Item
 
 
 class NewIngredientDialogFragment (var recipeFragment: RecipeFragment, var editIngredient: Ingredient?): DialogFragment() {
@@ -30,12 +24,17 @@ class NewIngredientDialogFragment (var recipeFragment: RecipeFragment, var editI
     override fun onAttach(context: Context) {
         super.onAttach(context)
         listener = recipeFragment as? NewIngredientDialogListener
-            ?: throw RuntimeException("Activity must implement the NewShoppingItemDialogListener interface!")
+            ?: throw RuntimeException("Activity must implement the NewIngredientDialogListener interface!")
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val title = when(editIngredient){
+            null -> getString(R.string.new_ingredient)
+            else -> getString(R.string.edit_ingredient)
+        }
+
         return AlertDialog.Builder(requireContext())
-            .setTitle(hu.hazi.recepttarolo.R.string.new_ingredient)
+            .setTitle(title)
             .setView(getContentView())
             .setPositiveButton(hu.hazi.recepttarolo.R.string.ok) { dialogInterface, i ->
                 if (isValid()) {
@@ -48,7 +47,6 @@ class NewIngredientDialogFragment (var recipeFragment: RecipeFragment, var editI
             }
             .setNegativeButton(hu.hazi.recepttarolo.R.string.cancel, null)
             .create()
-
     }
 
     private fun isValid() = descriptionEditText.text.isNotEmpty()
@@ -64,9 +62,7 @@ class NewIngredientDialogFragment (var recipeFragment: RecipeFragment, var editI
         return editIngredient
     }
 
-
     private lateinit var descriptionEditText: EditText
-
 
     private fun getContentView(): View {
         val contentView =

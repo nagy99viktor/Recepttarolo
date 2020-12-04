@@ -3,13 +3,10 @@ package hu.hazi.recepttarolo.recipe.ingredient
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.annotation.DrawableRes
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import hu.hazi.recepttarolo.R
-import hu.hazi.recepttarolo.recipe.Recipe
-import hu.hazi.recepttarolo.recipe.RecipeAdapter
-import hu.hazi.recepttarolo.recipe.shoppinglist.Item
 
 
 class IngredientAdapter(private val listener: IngredientClickListener) :
@@ -46,12 +43,9 @@ class IngredientAdapter(private val listener: IngredientClickListener) :
     }
 
     interface IngredientClickListener {
-        fun onItemChanged(item: Ingredient)
         fun onItemDeleted(item: Ingredient)
         fun onItemEdit(item: Ingredient)
     }
-
-
 
     inner class IngredientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
@@ -72,7 +66,6 @@ class IngredientAdapter(private val listener: IngredientClickListener) :
             editButton.setOnClickListener {
                 item?.let { it1 -> listener.onItemEdit(it1) }
             }
-
         }
     }
 }

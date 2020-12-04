@@ -1,19 +1,15 @@
 package hu.hazi.recepttarolo.recipe.shoppinglist
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import hu.hazi.recepttarolo.R
 import hu.hazi.recepttarolo.recipe.Database
 import hu.hazi.recepttarolo.recipe.RecipeDatabase
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_shopping_list.*
-
 import kotlin.concurrent.thread
 
 class ShoppingListActivity : AppCompatActivity(), ItemAdapter.ItemClickListener,
@@ -31,14 +27,11 @@ class ShoppingListActivity : AppCompatActivity(), ItemAdapter.ItemClickListener,
                     NewItemDialogFragment.TAG
                 )
             }
-
-
         }
 
     override fun onResume() {
         super.onResume()
         database= Database.getInstance(this)
-
         initRecyclerView()
     }
 
@@ -85,16 +78,14 @@ class ShoppingListActivity : AppCompatActivity(), ItemAdapter.ItemClickListener,
 
             thread {
                 database.itemDao().update(item)
-                Log.d("MainActivity", "ShoppingItem update was successful")
             }
         }
 
         override fun onItemDeleted(item: Item) {
             thread {
                 database.itemDao().deleteItem(item)
-                Log.d("MainActivity", "ShoppingItem delete was successful")
+                loadItemsInBackground();
             }
-            loadItemsInBackground();
         }
 
     override fun onItemEdit(item: Item) {
@@ -123,6 +114,4 @@ class ShoppingListActivity : AppCompatActivity(), ItemAdapter.ItemClickListener,
             loadItemsInBackground();
         }
     }
-
-
 }

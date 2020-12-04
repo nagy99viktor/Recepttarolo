@@ -6,18 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.CheckBox
 import android.widget.EditText
-import hu.hazi.recepttarolo.R
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import hu.hazi.recepttarolo.R
 import hu.hazi.recepttarolo.recipe.Recipe
-
-import hu.hazi.recepttarolo.recipe.ingredient.Ingredient
-import hu.hazi.recepttarolo.recipe.ingredient.NewIngredientDialogFragment
-import hu.hazi.recepttarolo.recipe.pager.RecipeFragment
-import hu.hazi.recepttarolo.recipe.shoppinglist.Item
 
 
 class EditRecipeDialogFragment (var recipeFragment: RecipeFragment, var editRecipe: Recipe): DialogFragment() {
@@ -30,7 +24,7 @@ class EditRecipeDialogFragment (var recipeFragment: RecipeFragment, var editReci
     override fun onAttach(context: Context) {
         super.onAttach(context)
         listener = recipeFragment as? EditRecipeDialogFragment.EditRecipeDialogListener
-            ?: throw RuntimeException("Activity must implement the NewShoppingItemDialogListener interface!")
+            ?: throw RuntimeException("Activity must implement the EditRecipeDialogListener interface!")
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -82,6 +76,6 @@ class EditRecipeDialogFragment (var recipeFragment: RecipeFragment, var editReci
     }
 
     companion object {
-        const val TAG = "NewIngredientDialogFragment"
+        const val TAG = "NewRecipeDialogFragment"
     }
 }

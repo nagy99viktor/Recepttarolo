@@ -12,7 +12,6 @@ import hu.hazi.recepttarolo.recipe.shoppinglist.ItemDao
 @TypeConverters(value = [Recipe.Category::class])
 abstract class RecipeDatabase : RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
-
     abstract fun ingredientDao(): IngredientDao
     abstract fun itemDao(): ItemDao
 }

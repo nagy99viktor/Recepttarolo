@@ -45,6 +45,7 @@ class ItemAdapter(private val listener: ItemClickListener) :
     interface ItemClickListener {
         fun onItemChanged(item: Item)
         fun onItemDeleted(item: Item)
+        fun onItemEdit(item: Item)
     }
 
 
@@ -52,6 +53,7 @@ class ItemAdapter(private val listener: ItemClickListener) :
         val descriptionTextView: TextView
         val isBoughtCheckBox: CheckBox
         val removeButton: ImageButton
+        val editButton: ImageButton
 
         var item: Item? = null
 
@@ -60,6 +62,7 @@ class ItemAdapter(private val listener: ItemClickListener) :
             descriptionTextView = itemView.findViewById(R.id.ItemDescriptionTextView)
             isBoughtCheckBox = itemView.findViewById(R.id.ItemIsBoughtCheckBox)
             removeButton = itemView.findViewById(R.id.ItemRemoveButton)
+            editButton = itemView.findViewById(R.id.ItemEditButton)
             isBoughtCheckBox.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
                 item?.let {
                     val newItem = it.copy(
@@ -71,6 +74,9 @@ class ItemAdapter(private val listener: ItemClickListener) :
             })
             removeButton.setOnClickListener {
                 item?.let { it1 -> listener.onItemDeleted(it1) }
+            }
+            editButton.setOnClickListener {
+                item?.let { it1 -> listener.onItemEdit(it1) }
             }
 
         }

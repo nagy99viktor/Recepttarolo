@@ -26,7 +26,7 @@ class ShoppingListActivity : AppCompatActivity(), ItemAdapter.ItemClickListener,
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_shopping_list)
             newItemFab.setOnClickListener{
-                NewItemDialogFragment().show(
+                NewItemDialogFragment(null).show(
                     supportFragmentManager,
                     NewItemDialogFragment.TAG
                 )
@@ -82,6 +82,7 @@ class ShoppingListActivity : AppCompatActivity(), ItemAdapter.ItemClickListener,
         }
 
         override fun onItemChanged(item: Item) {
+
             thread {
                 database.itemDao().update(item)
                 Log.d("MainActivity", "ShoppingItem update was successful")
@@ -96,7 +97,14 @@ class ShoppingListActivity : AppCompatActivity(), ItemAdapter.ItemClickListener,
             loadItemsInBackground();
         }
 
-        override fun onItemCreated(newItem: Item) {
+    override fun onItemEdit(item: Item) {
+        NewItemDialogFragment(item).show(
+            supportFragmentManager,
+            NewItemDialogFragment.TAG
+        )
+    }
+
+    override fun onItemCreated(newItem: Item) {
             thread {
                 val newId = database.itemDao().insert(newItem)
                 val newItem2 = newItem.copy(
@@ -108,5 +116,13 @@ class ShoppingListActivity : AppCompatActivity(), ItemAdapter.ItemClickListener,
             }
         }
 
+    override fun onItemEdited(editedItem: Item) {
+        thread {
+            database.itemDao().update(editedItem)
 
+            loadItemsInBackground();
+        }
     }
+
+
+}

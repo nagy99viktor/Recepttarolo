@@ -15,9 +15,10 @@ import androidx.fragment.app.DialogFragment
 import hu.hazi.recepttarolo.R
 
 
-class NewItemDialogFragment : DialogFragment() {
+class NewItemDialogFragment(var editItem: Item?) : DialogFragment() {
     interface NewItemDialogListener {
         fun onItemCreated(newItem: Item)
+        fun onItemEdited(newItem: Item)
     }
 
     private lateinit var listener: NewItemDialogListener
@@ -34,7 +35,11 @@ class NewItemDialogFragment : DialogFragment() {
             .setView(getContentView())
             .setPositiveButton(R.string.ok) { dialogInterface, i ->
                 if (isValid()) {
-                    listener.onItemCreated(getShoppingItem())
+                    if(editItem==null) {
+                        listener.onItemCreated(getItem())
+                    }else{
+                        listener.onItemEdited(getEditedItem()!!)
+                    }
                 }
             }
             .setNegativeButton(R.string.cancel, null)
@@ -43,11 +48,19 @@ class NewItemDialogFragment : DialogFragment() {
 
     private fun isValid() = descriptionEditText.text.isNotEmpty()
 
-    private fun getShoppingItem() = Item(
+
+    private fun getItem() = Item(
         id = null,
         description = descriptionEditText.text.toString(),
         isBought = false
     )
+
+    private fun getEditedItem(): Item? {
+        editItem?.description= descriptionEditText.text.toString()
+        return editItem
+    }
+
+
 
 
     private lateinit var descriptionEditText: EditText
@@ -58,6 +71,9 @@ class NewItemDialogFragment : DialogFragment() {
         val contentView =
             LayoutInflater.from(context).inflate(R.layout.fragment_new_item_dialog, null)
         descriptionEditText = contentView.findViewById(R.id.ItemDescriptionEditText)
+        if(editItem!=null) {
+            descriptionEditText.setText(editItem?.description)
+        }
         return contentView
     }
 

@@ -17,11 +17,13 @@ import hu.hazi.recepttarolo.recipe.ingredient.Ingredient
 import hu.hazi.recepttarolo.recipe.ingredient.IngredientAdapter
 import hu.hazi.recepttarolo.recipe.ingredient.NewIngredientDialogFragment
 import hu.hazi.recepttarolo.recipe.shoppinglist.Item
+import hu.hazi.recepttarolo.recipe.shoppinglist.NewItemDialogFragment
 import kotlinx.android.synthetic.main.fragment_recipe.*
 import kotlin.concurrent.thread
 
 
-class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDialogFragment.NewIngredientDialogListener, IngredientAdapter.IngredientClickListener {
+class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDialogFragment.NewIngredientDialogListener, IngredientAdapter.IngredientClickListener,
+    EditRecipeDialogFragment.EditRecipeDialogListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: IngredientAdapter
     private var recipeDataHolder: RecipeDataHolder? = null
@@ -62,7 +64,7 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
         newIngredientFab.setOnClickListener{
 
             fragmentManager?.let { it1 ->
-                NewIngredientDialogFragment(this).show(
+                NewIngredientDialogFragment(this, null).show(
                     it1.beginTransaction(),
                     NewIngredientDialogFragment.TAG
                 )
@@ -79,6 +81,15 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
 
         }
 
+        RecipeEditButton.setOnClickListener{
+            fragmentManager?.let { it1 ->
+                EditRecipeDialogFragment(this, recipe).show(
+                    it1.beginTransaction(),
+                    EditRecipeDialogFragment.TAG
+                )
+            }
+        }
+
         initRecyclerView()
     }
 
@@ -93,12 +104,7 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
     private fun displayWeatherData() {
 
         tvMain.text = recipe.name
-        /*tvDescription.text = weather?.description
 
-        Glide.with(this)
-            .load("https://openweathermap.org/img/w/${weather?.icon}.png")
-            .transition(DrawableTransitionOptions().crossFade())
-            .into(ivIcon)*/
     }
 
     override fun onIngredientCreated(newItem: Ingredient) {
@@ -115,6 +121,13 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
         }
     }
 
+    override fun onIngredientEdited(newIngredient: Ingredient) {
+        thread {
+            Database.getInstance(requireContext()).ingredientDao().update(newIngredient)
+            loadItemsInBackground();
+        }
+    }
+
     override fun onItemChanged(item: Ingredient) {
         TODO("Not yet implemented")
     }
@@ -126,7 +139,23 @@ class RecipeFragment(private var recipe: Recipe) : Fragment(), NewIngredientDial
         loadItemsInBackground();
     }
 
-    override fun onIngredientSelected(position: Int) {
-        TODO("Not yet implemented")
+    override fun onItemEdit(ingredient: Ingredient) {
+        fragmentManager?.let { it1 ->
+            NewIngredientDialogFragment(this, ingredient).show(
+                it1.beginTransaction(),
+                NewIngredientDialogFragment.TAG
+            )
+        }
     }
+
+    override fun onRecipeEdited(editedRecipe: Recipe) {
+        recipe.name= editedRecipe.name
+        recipe.description= editedRecipe.description
+        recipe.category= editedRecipe.category
+        displayWeatherData()
+        thread {
+            Database.getInstance(requireContext()).recipeDao().update(recipe)
+        }
+    }
+
 }

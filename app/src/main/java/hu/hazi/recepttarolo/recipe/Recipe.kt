@@ -8,9 +8,9 @@ import androidx.room.TypeConverter
 @Entity(tableName = "recipes")
 data class Recipe (
     @ColumnInfo(name = "id") @PrimaryKey(autoGenerate = true) val id: Long?,
-    @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "category") val category: Category
+    @ColumnInfo(name = "name") var name: String,
+    @ColumnInfo(name = "description") var description: String,
+    @ColumnInfo(name = "category") var category: Category
 ){
     enum class Category {
         SOUP, MAIN_COURSE, DESSERT;

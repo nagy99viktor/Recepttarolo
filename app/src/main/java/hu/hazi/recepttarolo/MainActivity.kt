@@ -89,8 +89,9 @@ class MainActivity : AppCompatActivity(), RecipeAdapter.RecipeClickListener,
             Database.getInstance(this).ingredientDao().deleteByRecipeId(item.id)
             Database.getInstance(this).recipeDao().deleteItem(item)
             Log.d("MainActivity", "ShoppingItem delete was successful")
+            loadItemsInBackground();
         }
-        loadItemsInBackground();
+
     }
 
     override fun onRecipeCreated(newItem: Recipe) {

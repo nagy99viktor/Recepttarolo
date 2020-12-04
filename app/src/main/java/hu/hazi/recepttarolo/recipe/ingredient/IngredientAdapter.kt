@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import hu.hazi.recepttarolo.R
 import hu.hazi.recepttarolo.recipe.Recipe
 import hu.hazi.recepttarolo.recipe.RecipeAdapter
+import hu.hazi.recepttarolo.recipe.shoppinglist.Item
 
 
 class IngredientAdapter(private val listener: IngredientClickListener) :
@@ -47,7 +48,7 @@ class IngredientAdapter(private val listener: IngredientClickListener) :
     interface IngredientClickListener {
         fun onItemChanged(item: Ingredient)
         fun onItemDeleted(item: Ingredient)
-        fun onIngredientSelected(position: Int)
+        fun onItemEdit(item: Ingredient)
     }
 
 
@@ -56,16 +57,20 @@ class IngredientAdapter(private val listener: IngredientClickListener) :
 
         val descriptionTextView: TextView
         val removeButton: ImageButton
+        val editButton: ImageButton
         var item: Ingredient? = null
 
         init {
 
             descriptionTextView = itemView.findViewById(R.id.IngredientDescriptionTextView)
             removeButton = itemView.findViewById(R.id.IngredientRemoveButton)
+            editButton = itemView.findViewById(R.id.IngredientEditButton)
 
-            itemView.setOnClickListener { listener?.onIngredientSelected(this.adapterPosition) }
             removeButton.setOnClickListener {
                 item?.let { it1 -> listener.onItemDeleted(it1) }
+            }
+            editButton.setOnClickListener {
+                item?.let { it1 -> listener.onItemEdit(it1) }
             }
 
         }

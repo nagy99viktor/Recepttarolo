@@ -31,4 +31,7 @@
     <string name="add_new_recipe">Add new recipe</string>
     <string name="add_new_item">Add new item</string>
     <string name="delete_all">Delete all</string>
+    <string name="delete_button">Delete button</string>
+    <string name="edit_button">Edit button</string>
+    <string name="edit_recipe">Edit recipe</string>
 </resources>
